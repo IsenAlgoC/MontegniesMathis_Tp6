@@ -78,27 +78,23 @@ int InsertElementAt(LinkedList *Liste, int i, Enregistrement pers) {
 	else {
 		if (Liste->size == 0) { // insertion en t�te de l'unique �l�ment
 			NewElement = NewLinkedListElement(pers);
-			if (NewElement != NULL) {
-			//
-			//
-			//   insertion code ici
-			//
-			//
-			//
-		}
+			if (NewElement != NULL) 
+			{
+				Liste->head = NewElement;
+				Liste->tail = NewElement;
+				Liste->size++;
+			}
 			else {
 				return(0);
 			}
 		}
 		if (Liste->size <= i) { // insertion en queue
 			NewElement = NewLinkedListElement(pers);
-			if (NewElement != NULL) {
-			//
-			//
-			//   insertion code ici
-			//
-			//
-			//
+			if (NewElement != NULL) 
+			{
+				Liste->tail->next = NewElement;
+				Liste->tail = NewElement;
+				Liste->size += 1;
 			}
 			else {
 				return(0);
@@ -118,11 +114,43 @@ int DeleteLinkedListElem(LinkedList * list, SingleLinkedListElem * item) {
 	if ((list->head == list->tail) && (list->size != 1)) return(0); // anomalie
 	if ((list->size == 0) || (item == NULL)) return(0); // pas d'�l�ment dans la liste ou item invalide
 
-	//
-	//
-	// compl�ter code ici
-	//
-	//
+	SingleLinkedListElem* tmp = list->head;
+	SingleLinkedListElem* precedent = NULL;
+	// l'élément est en tête et en queue, il y a donc 1 seul élément dans la liste
+	if ((item == list->head) && (item == list->tail)) {
+		list->head = NULL;
+		list->tail = NULL;
+		list->size = 0;
+		free(item);
+		return(1);
+	}
+	// il est en tête, on supprime la tête
+	if (item == list->head) {
+		list->head = item->next;  // la tete est remplacée par l'element qui l'a suit puisque elem = head  
+		list->size--;
+		free(item);
+		return(1);
+	}
+	// Recherche du maillon dans le reste de la liste chaînée
+	while ((tmp != NULL) && (tmp != item)) {
+		precedent = tmp;
+		tmp = tmp->next;
+	}
+	// s'il est en queue, on supprime la queue
+	if ((precedent != NULL) && (tmp == item) && (tmp->next == NULL)) {
+		list->tail = precedent;
+		precedent->next = NULL;
+		list->size--;
+		free(item);
+		return(1);
+	}
+	// s'il est au milieu, on supprime l'élément
+	if ((precedent != NULL) && (tmp == item) && (tmp->next != NULL)) {
+		precedent->next = item->next;  // 
+		list->size--;
+		free(item);
+		return(1);
+	}
 
 
 	return(0);  // pas trouv�

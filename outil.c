@@ -50,13 +50,20 @@ int ajouter_un_contact_dans_rep(Repertoire *rep, Enregistrement enr)
 		}
 
 	}
-	else {
-			//
-			// compl�ter code ici pour Liste
-			//
-			//
-			//
+	else 
+	{
+		int i = 0;
 
+		while (i < rep->nb_elts && est_sup(GetElementAt(rep->liste, i)->pers, enr)) {
+			i++;
+		}
+		// On ajoute l'élément à la place i
+		if (inserted = InsertElementAt(rep->liste, i, enr) != 0) {
+			rep->nb_elts += 1;
+			modif = true;
+			rep->est_trie = true;
+}
+		return inserted;
 	}
 
 
@@ -232,16 +239,16 @@ int rechercher_nom(Repertoire *rep, char nom[], int ind)
 	int s = 0;
 
 #ifdef IMPL_TAB
-	if (ind > rep->nb_elts || ind < 0) { return 0; }
+	if (ind > rep->nb_elts || ind < 0) { return -1; }
 	
 	strncpy_s(tmp_nom, _countof(tmp_nom), nom, _TRUNCATE);    //on copie nom dans tmp_nom
-	_strupr_s(tmp_nom, strlen(tmp_nom) + 1);				// le nom est passé en majuscule
-	ind_fin = rep->nb_elts;
-	while (i < ind_fin)
+	_strupr_s(tmp_nom, _countof(tmp_nom));				// le nom est passé en majuscule
+	ind_fin = rep->nb_elts - 1;
+	while ((i <= ind_fin) && (!trouve))
 	{
 		strncpy_s(tmp_nom2, _countof(tmp_nom2), rep->tab[i].nom, _TRUNCATE);   //même étape
-		_strupr_s(tmp_nom2, strlen(tmp_nom2) + 1);
-		if (tmp_nom == tmp_nom2)      //compare les deux noms
+		_strupr_s(tmp_nom2, _countof(tmp_nom2));
+		if (strcmp(tmp_nom,tmp_nom2) == 0)      //compare les deux noms
 		{
 			trouve = true;
 			return i;
@@ -251,6 +258,7 @@ int rechercher_nom(Repertoire *rep, char nom[], int ind)
 			i++;
 		}
 	}
+	return -1;
 	
 #else
 #ifdef IMPL_LIST
