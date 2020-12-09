@@ -42,13 +42,13 @@ int ajouter_un_contact_dans_rep(Repertoire *rep, Enregistrement enr)
 
 	bool inserted = false;
 	if (rep->nb_elts == 0) {
-		if (InsertElementAt(rep->liste, rep->liste->size, enr) != 0) {
+		if (InsertElementAt(rep->liste, rep->liste->size, enr) != 0) 
+		{
 			rep->nb_elts += 1;
 			modif = true;
 			rep->est_trie = true;
 			return(OK);
 		}
-
 	}
 	else 
 	{
